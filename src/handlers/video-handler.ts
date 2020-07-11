@@ -33,7 +33,7 @@ export class VideoHandler implements HandlerInterface {
         from(this._raspivideo.record(this._videoName, this._videoDuration)).pipe(
             switchMap((photo) => {
                 return of(fs.createReadStream(
-                    this._videoFolder + '/' + this._videoName + '.' + this._videoFormat
+                    this._videoFolder + '/' + this._convertedVideoName + '.' + this._videoFormat
                 ));
             }),
             switchMap((stream) => {
