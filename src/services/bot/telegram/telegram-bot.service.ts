@@ -6,6 +6,7 @@ import {TelegramBotConfig} from './telegram-bot.service.interface';
 import {inject, singleton} from 'tsyringe';
 import {diConstants} from '../../../container/di-constants';
 import {ConfigInterface} from '../../../../config/config.interface';
+import {Stream} from 'stream';
 
 @singleton()
 export class TelegramBotService implements BotServiceInterface {
@@ -14,6 +15,7 @@ export class TelegramBotService implements BotServiceInterface {
     protected readonly _config: TelegramBotConfig;
 
     private readonly _photoCommand: string = '/photo';
+    private readonly _videoCommand: string = '/video';
 
     constructor(
         @inject(diConstants.ConfigInterface)
@@ -47,10 +49,10 @@ export class TelegramBotService implements BotServiceInterface {
 
                 if (!this._config.allowlist.includes(msg.from?.id ?? msg.chat.id)) {
                     command = ECommand.NOT_ALLOWED;
-                } else if (
-                    msg.text === this._photoCommand
-                ) {
-                    command === ECommand.PHOTO;
+                } else if (msg.text === this._photoCommand) {
+                    command = ECommand.PHOTO;
+                } else if (msg.text === this._videoCommand) {
+                    command = ECommand.VIDEO;
                 } else {
                     command = ECommand.UNKNOWN;
                 }
@@ -78,6 +80,17 @@ export class TelegramBotService implements BotServiceInterface {
 
     public photo(toId: string | number, buffer: Buffer): Observable<void> {
         return from(this._bot.sendPhoto(toId, buffer)).pipe(
+            catchError((err, obs) => {
+                console.error(err.message);
+
+                return obs;
+            }),
+            map(() => undefined)
+        );
+    }
+
+    public video(toId: string | number, stream: Stream): Observable<void> {
+        return from(this._bot.sendVideo(toId, stream)).pipe(
             catchError((err, obs) => {
                 console.error(err.message);
 

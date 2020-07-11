@@ -6,6 +6,7 @@ import {diConstants} from '../../container/di-constants';
 import {NotAllowedHandler} from '../not-allowed-handler';
 import {PhotoHandler} from '../photo-handler';
 import {UnknownHandler} from '../unknown-handler';
+import {VideoHandler} from '../video-handler';
 
 @injectable()
 export class HandlerFactory implements HandlerFactoryInterface {
@@ -22,6 +23,10 @@ export class HandlerFactory implements HandlerFactoryInterface {
 
         if (command.type === ECommand.PHOTO) {
             return new PhotoHandler(command, this._botService);
+        }
+
+        if (command.type === ECommand.VIDEO) {
+            return new VideoHandler(command, this._botService);
         }
 
         return new UnknownHandler(command, this._botService);
