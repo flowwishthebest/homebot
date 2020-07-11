@@ -6,8 +6,7 @@ import {switchMap, tap} from 'rxjs/operators';
 
 export class PhotoHandler implements HandlerInterface {
     protected readonly _raspistill = new Raspistill({
-        encoding: 'png',
-        shutterspeed: 100,
+        encoding: 'jpg',
         noFileSave: true,
         noPreview: true,
     })
