@@ -7,6 +7,7 @@ import * as fs from 'fs';
 
 export class VideoHandler implements HandlerInterface {
     protected readonly _videoName: string = 'video';
+    protected readonly _convertedVideoName: string = 'video_converted';
     protected readonly _videoDuration: number = 30 * 1000;
     protected readonly _videoFolder: string = './videos';
     protected readonly _videoFormat: any = 'mp4';
