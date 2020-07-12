@@ -1,5 +1,7 @@
-import {CommandInterface} from '../services/bot/bot.service.interface';
+export interface IHandlerCtx {
+    locale?: string;
+}
 
 export interface HandlerInterface {
-    handle(): void;
+    handle(ctx?: IHandlerCtx): void;
 }

@@ -7,28 +7,47 @@ import {NotAllowedHandler} from '../not-allowed-handler';
 import {PhotoHandler} from '../photo-handler';
 import {UnknownHandler} from '../unknown-handler';
 import {VideoHandler} from '../video-handler';
+import {LocaleServiceInterface} from "../../services/locale/locale.service.interface";
 
 @injectable()
 export class HandlerFactory implements HandlerFactoryInterface {
+
     constructor(
         @inject(diConstants.BotServiceInterface)
         protected readonly _botService: BotServiceInterface,
-    ) {
-    }
+        @inject(diConstants.LocaleServiceInterface)
+        protected readonly _localeService: LocaleServiceInterface,
+    ) {}
 
     public getHandler(command: CommandInterface): HandlerInterface {
         if (command.type === ECommand.NOT_ALLOWED) {
-            return new NotAllowedHandler(command, this._botService);
+            return new NotAllowedHandler(
+                command,
+                this._botService,
+                this._localeService,
+            );
         }
 
         if (command.type === ECommand.PHOTO) {
-            return new PhotoHandler(command, this._botService);
+            return new PhotoHandler(
+                command,
+                this._botService,
+                this._localeService,
+            );
         }
 
         if (command.type === ECommand.VIDEO) {
-            return new VideoHandler(command, this._botService);
+            return new VideoHandler(
+                command,
+                this._botService,
+                this._localeService,
+            );
         }
 
-        return new UnknownHandler(command, this._botService);
+        return new UnknownHandler(
+            command,
+            this._botService,
+            this._localeService,
+        );
     }
 }

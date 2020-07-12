@@ -1,10 +1,12 @@
-import {HandlerInterface} from './handler.interface';
+import {HandlerInterface, IHandlerCtx} from './handler.interface';
 import {BotServiceInterface, CommandInterface} from '../services/bot/bot.service.interface';
 import {Raspistill} from 'node-raspistill';
-import {from, of, zip} from 'rxjs';
-import {switchMap, tap} from 'rxjs/operators';
+import {from} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
+import {LocaleServiceInterface} from "../services/locale/locale.service.interface";
 
 export class PhotoHandler implements HandlerInterface {
+
     protected readonly _raspistill = new Raspistill({
         encoding: 'jpg',
         noFileSave: true,
@@ -13,12 +15,17 @@ export class PhotoHandler implements HandlerInterface {
 
     constructor(
         protected readonly _command: CommandInterface,
-        protected readonly _botService: BotServiceInterface
-    ) {
-    }
+        protected readonly _botService: BotServiceInterface,
+        protected readonly _localeService: LocaleServiceInterface,
+    ) {}
 
-    public handle(): void {
-        this._botService.message(this._command.fromChatId, 'Сейчас попробую... Подожди немного')
+    public handle(ctx?: IHandlerCtx): void {
+        const localedMsg = this._localeService.translate(
+            'Сейчас попробую... Подожди немного',
+            ctx?.locale,
+        );
+
+        this._botService.message(this._command.fromChatId, localedMsg)
             .subscribe(() => {}, (err) => console.error(err));
 
         from(this._raspistill.takePhoto()).pipe(

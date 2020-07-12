@@ -11,12 +11,11 @@ export class App implements AppInterface {
         protected readonly _botService: BotServiceInterface,
         @inject(diConstants.HandlerFactory)
         protected readonly _handlerFactory: HandlerFactory,
-    ) {
-    }
+    ) {}
 
     public async bootstrap(): Promise<void> {
         this._botService.commands().subscribe((command) => {
-            this._handlerFactory.getHandler(command).handle()
+            this._handlerFactory.getHandler(command).handle();
         });
     }
 }

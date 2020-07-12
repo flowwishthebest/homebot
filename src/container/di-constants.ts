@@ -3,4 +3,5 @@ export const diConstants = {
     ConfigInterface: 'ConfigInterface',
     App: 'App',
     HandlerFactory: 'HandlerFactory',
+    LocaleServiceInterface: 'LocaleServiceInterface',
 }
